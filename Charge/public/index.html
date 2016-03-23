@@ -7,9 +7,10 @@
     <meta name="description" content="Finding charge ports for your EV">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSS -->
-    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css" integrity="sha384-XXXXXXXX" crossorigin="anonymous"/>
     <link rel="stylesheet" href="style.css"/>
-
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Iceland"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous"/>
     <!-- Google Maps API -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsSuOT77hB-1QSWErdkiOJKK4AJK-K798"></script>
     <!-- Modernizr -->
@@ -26,12 +27,9 @@
 
 </head>
 <body ng-controller="addCtrl">
-<div class="container">
+<section class="container">
     <div class="header">
-        <ul class="nav nav-pills pull-right">
-            <li active><a href="">Post a Charge Port</a></li>
-        </ul>
-        <h3 class="text-muted">Charge</h3>
+        <h3 class="text-muted text-md-center" style="font-family:Iceland; font-size:48px;">C H A R G E</h3>
     </div>
     <!-- Map and Side Panel -->
     <div class="row content">
@@ -44,7 +42,9 @@
             <div class="panel panel-default">
                 <!-- Panel Title -->
                 <div class="panel-heading">
-                    <h2 class="panel-title text-center">Post a Charge Location<span class="glyphicon glyphicon-map-marker"></span></h2>
+                    <h2 class="panel-title text-center">Post a Charge Location</h2>
+                    <span class="btn btn-sm btn-danger btn-block warning">All fields required</span>
+                    </p>
                 </div>
                 <!-- Panel Body -->
                 <div class="panel-body">
@@ -52,35 +52,31 @@
                     <form name ="addForm" novalidate>
                         <!-- Text Boxes and Other User Inputs. Note ng-model binds the values to Angular $scope -->
                         <div class="form-group">
-                            <label for="street">Street <span class="badge">All fields required</span></label>
-                            <input type="text" class="form-control" id="street" placeholder="42 Wallaby Way" ng-model="formData.street" required>
+                            <input type="text" class="form-control" id="street" placeholder="Street" ng-model="formData.street" required>
                         </div>
                         <div class="form-group">
-                            <label for="city">City</label>
-                            <input type="text" class="form-control" id="city" placeholder="Sydney" ng-model="formData.city" required>
+                            <input type="text" class="form-control" id="city" placeholder="City" ng-model="formData.city" required>
                         </div>
                         <div class="form-group">
-                            <label for="state">State</label>
-                            <input type="text" class="form-control" id="state" placeholder="AU" ng-model="formData.state" required>
+                            <input type="text" class="form-control" id="state" placeholder="State" ng-model="formData.state" required>
                         </div>
                         <div class="form-group">
-                            <label for="zip">ZIP</label>
-                            <input type="text" class="form-control" id="zip" placeholder="99999" ng-model="formData.zip" required>
+                            <input type="text" class="form-control" id="zip" placeholder="Zip Code" ng-model="formData.zip" required>
                         </div>
                         <div class="form-group">
                             <label for="latitude">Latitude</label>
-                            <input type="text" class="form-control" id="latitude" value="39.500" ng-model="formData.latitude" required>
+                            <input type="text" class="form-control" id="latitude" value="Latitude" ng-model="formData.latitude" required>
                         </div>
                         <div class="form-group">
                             <label for="longitude">Longitude</label>
-                            <input type="text" class="form-control" id="longitude" value="-98.350" ng-model="formData.longitude" required>
+                            <input type="text" class="form-control" id="longitude" value="Longitude" ng-model="formData.longitude" required>
                         </div>
                         <div class="form-group">
-                            <label for="verified">HTML5 Verified Location? <span><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-refresh"></span></button></span></label>
+                            <label for="verified">HTML5 Verified Location? <i class="fa fa-check-square-o"></i></label>
                             <input type="text" class="form-control" id="verified" placeholder= "Nope (Thanks for spamming my map...)" ng-model="formData.htmlverified" readonly>
                         </div>
                         <!-- Submit button. Note that its tied to createUser() function from addCtrl. Also note ng-disabled logic which prevents early submits.  -->
-                        <button type="submit" class="btn btn-danger btn-block" ng-click="createUser()" ng-disabled="addForm.$invalid">Submit</button>
+                        <button type="submit" class="btn btn-primary btn-block" ng-click="createUser()" ng-disabled="addForm.$invalid">Submit</button>
                     </form>
                 </div>
             </div>
@@ -89,8 +85,14 @@
     <hr/>
     <!-- Footer -->
     <div class="footer">
-        <p class="text-center"><span class="glyphicon glyphicon-check"></span> Created by Zach Lister and the Charge Team
+        <p class="text-md-center"><span>Project maintained by
+            <a href="https://github.com/zganger">zganger</a>,
+            <a href="https://github.com/zlister">zlister</a>,
+            <a href="https://github.com/biancaannoscia">biancaannoscia</a>, and
+            <a href="https://github.com/dlipovsk">dlipovsk</a> on GitHub <i class="fa fa-github"></i>
     </div>
-</div>
+</section>
+<script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js" integrity="sha384-XXXXXXXX" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
 </body>
 </html>

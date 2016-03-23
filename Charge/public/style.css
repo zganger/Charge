@@ -1,5 +1,11 @@
 /* Google Map! */
 #map {
-    height: 645px;
+    height: 700px;
     width: 645px;
+}
+
+.warning {
+    background-color: #d9534f !important;
+    border-color: #d9534f !important;
+    cursor:default;
 }
