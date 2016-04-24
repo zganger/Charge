@@ -7,17 +7,16 @@
     <meta name="description" content="Finding charge ports for your EV">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css"/>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Iceland"/>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous"/>
-    <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsSuOT77hB-1QSWErdkiOJKK4AJK-K798"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-hQpvDQiCJaD2H465dQfA717v7lu5qHWtDbWNPvaTJ0ID5xnPUlVXnKzq7b8YUkbN" crossorigin="anonymous">    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsSuOT77hB-1QSWErdkiOJKK4AJK-K798&libraries=places"></script>
     <!-- Modernizr -->
     <script src="../bower_components/modernizr/bin/modernizr"></script>
     <!-- JS Source -->
-    <script src="../bower_components/jquery/jquery.js"></script>
-    <script src="../bower_components/angular/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <!--<script src="../bower_components/angular/angular.js"></script>-->
     <script src="../bower_components/angular-route/angular-route.js"></script>
     <script src="../bower_components/angularjs-geolocation/dist/angularjs-geolocation.min.js"></script>
     <!-- Angular Source -->
@@ -28,11 +27,70 @@
 </head>
 <body ng-controller="addCtrl">
 <section class="container">
-    <div class="header">
-        <!--style="background:455257"-->
-        <h3 class="text-muted text-md-center" style="font-family:Iceland; font-size:48px; cursor:default;">C H A R G E</h3>
+    <div class="navbar-collapse collapse inverse" id="exCollapsingNavbar">
+        <div class="bg-inverse p-a-1">
+            <div class="panel-heading">
+                <h2 class="panel-title text-center">Post a Charge Location</h2>
+                <span class="btn btn-sm btn-danger btn-block warning">All fields required</span>
+                </p>
+            </div>
+            <div class="panel-body">
+                <form name ="addForm" novalidate>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="street" placeholder="Street" ng-model="formData.street" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="city" placeholder="City" ng-model="formData.city" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="state" placeholder="State" ng-model="formData.state" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="zip" placeholder="Zip Code" ng-model="formData.zip" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="latitude">Latitude</label>
+                        <input type="text" class="form-control" id="latitude" value="Latitude" ng-model="formData.latitude" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="longitude">Longitude</label>
+                        <input type="text" class="form-control" id="longitude" value="Longitude" ng-model="formData.longitude" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block" ng-click="createLoc()" ng-disabled="addForm.$invalid">Submit</button>
+                </form>
+            </div>
+        </div>
     </div>
+    <nav class="navbar navbar-light bg-faded">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar" style="float:left;">
+                &#9776;
+            </button>
+            <div class="navbar-brand" style="font-family:Iceland; font-size:32px; cursor:default;">C H A R G E</div>
+            <!--style="background:455257"-->
+        </div>
+    </nav>
     <!-- Map and Side Panel -->
+    <form name="directions" style="padding-top: 10px;" novalidate>
+    <div class="col-md-3">
+        <div class="form-group">
+            <input type="text" class="form-control" id="start" placeholder="Start" value="Start" ng-model="formData.start" required>
+        </div>
+        </div>
+        <div class="col-md-3">
+        <div class="form-group">
+            <input type="text" class="form-control" id="end" placeholder="End"value="End" ng-model="formData.end" required>
+        </div>
+            </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <input type="number" class="form-control" id="range" placeholder="Range" value="Range" ng-model="formData.range" required>
+            </div>
+        </div>
+        <div class="col-md-3">
+        <button type="submit" class="btn btn-primary btn-block" ng-click="getDirection()" ng-disabled="directions.$invalid">Get Directions</button>
+            </div>
+    </form>
     <div class="row content">
         <!-- Google Map -->
         <div class="col-md-9">
@@ -41,44 +99,8 @@
         <!-- Side Panel -->
         <div class="col-md-3">
             <div class="panel panel-default">
-                <!-- Panel Title -->
-                <div class="panel-heading">
-                    <h2 class="panel-title text-center">Post a Charge Location</h2>
-                    <span class="btn btn-sm btn-danger btn-block warning">All fields required</span>
-                    </p>
-                </div>
-                <!-- Panel Body -->
-                <div class="panel-body">
-                    <!-- Creates Form (novalidate disables HTML validation, Angular will control) -->
-                    <form name ="addForm" novalidate>
-                        <!-- Text Boxes and Other User Inputs. Note ng-model binds the values to Angular $scope -->
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="street" placeholder="Street" ng-model="formData.street" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="city" placeholder="City" ng-model="formData.city" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="state" placeholder="State" ng-model="formData.state" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="zip" placeholder="Zip Code" ng-model="formData.zip" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="latitude">Latitude</label>
-                            <input type="text" class="form-control" id="latitude" value="Latitude" ng-model="formData.latitude" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="longitude">Longitude</label>
-                            <input type="text" class="form-control" id="longitude" value="Longitude" ng-model="formData.longitude" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="verified">HTML5 Verified Location? <i class="fa fa-check-square-o"></i></label>
-                            <input type="text" class="form-control" id="verified" placeholder= "Nope (Thanks for spamming my map...)" ng-model="formData.htmlverified" readonly>
-                        </div>
-                        <!-- Submit button. Note that its tied to createUser() function from addCtrl. Also note ng-disabled logic which prevents early submits.  -->
-                        <button type="submit" class="btn btn-primary btn-block" ng-click="createUser()" ng-disabled="addForm.$invalid">Submit</button>
-                    </form>
+                <div id="directionsPanel" style="max-height:700px; overflow-y: scroll;">
+
                 </div>
             </div>
         </div>
@@ -93,8 +115,7 @@
             <a href="https://github.com/dlipovsk">dlipovsk</a> on GitHub <i class="fa fa-github"></i></span>
     </div>
 </section>
-<script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js" integrity="sha384-XXXXXXXX" crossorigin="anonymous"></script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
-<script>window.jQuery || document.write('<script src="https://code.jquery.com/jquery-2.2.2.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
 </body>
 </html>

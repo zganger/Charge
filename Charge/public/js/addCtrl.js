@@ -6,8 +6,6 @@ addCtrl.controller('addCtrl', function($scope, $http, $rootScope, geolocation, g
     // ----------------------------------------------------------------------------
     $scope.formData = {};
     var coords = {};
-    var lat = 0;
-    var long = 0;
 
     // Set initial coordinates to the center of the US
     $scope.formData.latitude = 39.500;
@@ -43,7 +41,7 @@ addCtrl.controller('addCtrl', function($scope, $http, $rootScope, geolocation, g
     });
 
     // Creates a new charge port based on the form fields
-    $scope.createUser = function() {
+    $scope.createLoc = function() {
 
         // Grabs all of the text box fields
         var chargeData = {
@@ -51,8 +49,7 @@ addCtrl.controller('addCtrl', function($scope, $http, $rootScope, geolocation, g
             city: $scope.formData.city,
             state: $scope.formData.state,
             zip: $scope.formData.zip,
-            location: [$scope.formData.longitude, $scope.formData.latitude],
-            htmlverified: $scope.formData.htmlverified
+            location: [$scope.formData.longitude, $scope.formData.latitude]
         };
 
         // Saves the charge port data to the db
@@ -71,5 +68,9 @@ addCtrl.controller('addCtrl', function($scope, $http, $rootScope, geolocation, g
             .error(function (data) {
                 console.log('Error: ' + data);
             });
+    };
+
+    $scope.getDirection = function() {
+        gservice.calculateAndDisplayRoute($scope.formData.start, $scope.formData.end, $scope.formData.range);
     };
 });

@@ -6,15 +6,20 @@ angular.module('gservice', [])
         // -------------------------------------------------------------
         // Service our factory will return
         var googleMapService = {};
+        var waypts = [];
+        var globalStart;
+        var globalEnd;
+        var globalRange = 100;
+        var directionService = new google.maps.DirectionsService;
+        var directionDisplay = new google.maps.DirectionsRenderer;
+        var startAutocomplete = new google.maps.places.Autocomplete(document.getElementById('start'));
+        var endAutocomplete = new google.maps.places.Autocomplete(document.getElementById('end'));
 
         // Array of locations obtained from API calls
         var locations = [];
         var APIlocations = [];
 
-        // Variables we'll use to help us pan to the right spot
-        var currentSelectedMarker;
-
-        // Selected Location (initialize to center of America)
+        // Selected Location (initialize to center of US)
         var selectedLat = 39.50;
         var selectedLong = -98.35;
 
@@ -25,6 +30,7 @@ angular.module('gservice', [])
         // Functions
         // --------------------------------------------------------------
         // Refresh the Map with new data. Function will take new latitude and longitude coordinates.
+
         googleMapService.refresh = function(latitude, longitude){
 
             // Clears the holding array of locations
@@ -39,9 +45,11 @@ angular.module('gservice', [])
             $http.get('/chargePorts').success(function(response){
                 // Convert the results into Google Map Format
                 locations = convertToMapPoints(response);
+                // Then initialize the map.
+                initialize(latitude, longitude);
             }).error(function(){});
 
-            var APIconnection = 'http://api.openchargemap.io/v2/poi/?output=json&countrycode=US&latitude=' + latitude + '&longitude=' + longitude + '&distance=100&maxresults=1000';
+            var APIconnection = 'http://api.openchargemap.io/v2/poi/?output=json&countrycode=US&latitude=' + latitude + '&longitude=' + longitude + '&distance=' + globalRange + '&maxresults=1000';
             $http.get(APIconnection).success(function(response){
                 APIlocations = APItoMapPoints(response);
                 // Then initialize the map.
@@ -49,9 +57,38 @@ angular.module('gservice', [])
             }).error(function(){});
         };
 
+        googleMapService.calculateAndDisplayRoute = function(start, end, range) {
+            if(startAutocomplete.getPlace().geometry) {
+                globalStart = { 'placeId' : startAutocomplete.getPlace().place_id };
+            }
+            else {
+                globalStart = start;
+            }
+            if(endAutocomplete.getPlace().geometry) {
+                globalEnd = { 'placeId' : endAutocomplete.getPlace().place_id };
+            }
+            else {
+                globalEnd = end;
+            }
+            globalRange = range;
+            directionService.route({
+                origin: globalStart,
+                destination: globalEnd,
+                waypoints: waypts,
+                optimizeWaypoints: true,
+                travelMode: google.maps.TravelMode.DRIVING
+            }, function(response, status) {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    directionDisplay.setDirections(response);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+            googleMapService.refresh(selectedLat, selectedLong);
+        };
+
         // Private Inner Functions
         // --------------------------------------------------------------
-        // Convert a JSON of users into map points
         var convertToMapPoints = function(response){
 
             // Clear the locations holder
@@ -102,8 +139,7 @@ angular.module('gservice', [])
                     ', ' + chargePorts.AddressInfo.StateOrProvince +
                     ' ' + chargePorts.AddressInfo.Postcode +
                     '</p>';
-
-                // Converts each of the JSON records into Google Maps Location format (Note [Lat, Lng] format).
+                
                 APIlocations.push({
                     latlon: new google.maps.LatLng(chargePorts.AddressInfo.Latitude, chargePorts.AddressInfo.Longitude),
                     message: new google.maps.InfoWindow({
@@ -116,7 +152,6 @@ angular.module('gservice', [])
                     zip: chargePorts.AddressInfo.Postcode
                 });
             }
-            // location is now an array populated with records in Google Maps format
             return APIlocations;
         };
 
@@ -135,21 +170,30 @@ var initialize = function(latitude, longitude) {
         });
     }
 
+    directionDisplay.setMap(map);
+    directionDisplay.setPanel(document.getElementById('directionsPanel'));
+
     // Loop through each location in the array and place a marker
     locations.forEach(function(n){
         var marker = new google.maps.Marker({
             position: n.latlon,
             map: map,
             title: "Big Map",
-            icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+            icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
         });
 
         // For each marker created, add a listener that checks for clicks
         google.maps.event.addListener(marker, 'click', function(){
 
             // When clicked, open the selected marker's message
-            currentSelectedMarker = n;
-            n.message.open(map, marker);
+            //n.message.open(map, marker);
+            var loc = n.latlon.lat() + ", " + n.latlon.lng();
+            waypts.push({
+                location: loc,
+                stopover: true
+            });
+            googleMapService.calculateAndDisplayRoute(globalStart, globalEnd, globalRange);
+            googleMapService.refresh(n.latlon.lat(), n.latlon.lng());
         });
     });
 
@@ -158,15 +202,19 @@ var initialize = function(latitude, longitude) {
             position: n.latlon,
             map: map,
             title: "Big Map",
-            icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+            icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
         });
 
         // For each marker created, add a listener that checks for clicks
         google.maps.event.addListener(APImarker, 'click', function(){
-
-            // When clicked, open the selected marker's message
-            currentSelectedMarker = n;
-            n.message.open(map, APImarker);
+            //n.message.open(map, APImarker);
+            var loc = n.latlon.lat() + ", " + n.latlon.lng();
+            waypts.push({
+                location: loc,
+                stopover: true
+            })
+            googleMapService.calculateAndDisplayRoute(globalStart, globalEnd, globalRange);
+            googleMapService.refresh(n.latlon.lat(), n.latlon.lng());
         });
     });
 
