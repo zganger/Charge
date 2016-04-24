@@ -30,44 +30,56 @@
     <div class="navbar-collapse collapse inverse" id="exCollapsingNavbar">
         <div class="bg-inverse p-a-1">
             <div class="panel-heading">
-                <h2 class="panel-title text-center">Post a Charge Location</h2>
+                <h2 class="panel-title text-center" style="text-align:center;">Post a new Charge Location</h2>
                 <span class="btn btn-sm btn-danger btn-block warning">All fields required</span>
                 </p>
             </div>
             <div class="panel-body">
                 <form name ="addForm" novalidate>
+                    <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" class="form-control" id="street" placeholder="Street" ng-model="formData.street" required>
                     </div>
                     <div class="form-group">
                         <input type="text" class="form-control" id="city" placeholder="City" ng-model="formData.city" required>
                     </div>
+                    </div>
+                    <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" class="form-control" id="state" placeholder="State" ng-model="formData.state" required>
                     </div>
                     <div class="form-group">
                         <input type="text" class="form-control" id="zip" placeholder="Zip Code" ng-model="formData.zip" required>
                     </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div style="margin-top:7px;"> Latitude: </div>
+                        <div style="margin-top:28px;"> Longitude: </div>
+                    </div>
+                    <div class="col-md-3">
                     <div class="form-group">
-                        <label for="latitude">Latitude</label>
                         <input type="text" class="form-control" id="latitude" value="Latitude" ng-model="formData.latitude" required>
                     </div>
                     <div class="form-group">
-                        <label for="longitude">Longitude</label>
                         <input type="text" class="form-control" id="longitude" value="Longitude" ng-model="formData.longitude" required>
+                    </div>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block" ng-click="createLoc()" ng-disabled="addForm.$invalid">Submit</button>
                 </form>
+            </div>
+            <div class="footer">
+                <p class="text-md-center"><span>Project maintained by
+            <a href="https://github.com/zganger">zganger</a>,
+            <a href="https://github.com/zlister">zlister</a>,
+            <a href="https://github.com/biancaannoscia">biancaannoscia</a>, and
+            <a href="https://github.com/dlipovsk">dlipovsk</a> on GitHub <i class="fa fa-github"></i></span>
             </div>
         </div>
     </div>
     <nav class="navbar navbar-light bg-faded">
         <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar" style="float:left;">
-                &#9776;
-            </button>
-            <div class="navbar-brand" style="font-family:Iceland; font-size:32px; cursor:default;">C H A R G E</div>
-            <!--style="background:455257"-->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar" style="float:left; margin-top:8px">&#9776;</button>
+            <div class="navbar-brand" style="font-family:Iceland; font-size:32px; cursor:default; margin-left:30px;">C H A R G E</div>
         </div>
     </nav>
     <!-- Map and Side Panel -->
@@ -99,20 +111,9 @@
         <!-- Side Panel -->
         <div class="col-md-3">
             <div class="panel panel-default">
-                <div id="directionsPanel" style="max-height:700px; overflow-y: scroll;">
-
-                </div>
+                <div id="directionsPanel" style="max-height:600px; overflow-y: scroll;"></div>
             </div>
         </div>
-    </div>
-    <hr/>
-    <!-- Footer -->
-    <div class="footer">
-        <p class="text-md-center"><span>Project maintained by
-            <a href="https://github.com/zganger">zganger</a>,
-            <a href="https://github.com/zlister">zlister</a>,
-            <a href="https://github.com/biancaannoscia">biancaannoscia</a>, and
-            <a href="https://github.com/dlipovsk">dlipovsk</a> on GitHub <i class="fa fa-github"></i></span>
     </div>
 </section>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
