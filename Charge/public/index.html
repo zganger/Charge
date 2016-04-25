@@ -26,7 +26,7 @@
 
 </head>
 <body ng-controller="addCtrl">
-<section class="container">
+<section>
     <div class="navbar-collapse collapse inverse" id="navbar">
         <div class="bg-inverse p-a-1">
             <div class="panel-heading">
@@ -54,17 +54,19 @@
                     </div>
                     <div class="col-md-1">
                         <div style="margin-top:7px;"> Latitude: </div>
-                            <div style="margin-top:28px;"> Longitude: </div>
-                        </div>
-                    <div class="col-md-3">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="latitude" value="Latitude" ng-model="formData.latitude" required>
+                        <div style="margin-top:28px;"> Longitude: </div>
                     </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="latitude" value="Latitude" ng-model="formData.latitude" required>
+                        </div>
                         <div class="form-group">
                             <input type="text" class="form-control" id="longitude" value="Longitude" ng-model="formData.longitude" required>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block" ng-click="createLoc()" ng-disabled="addForm.$invalid">Submit</button>
+                    <div class="col-md-4" style="margin-left:33.333%; margin-right:33.333%">
+                        <button type="submit" class="btn btn-primary btn-block" ng-click="createLoc()" ng-disabled="addForm.$invalid">Submit</button>
+                    </div>
                 </form>
             </div>
             <p style="text-align:center; margin-bottom:0px; margin-top:13px;"><span>Project maintained by
@@ -74,12 +76,13 @@
             <a href="https://github.com/dlipovsk">dlipovsk</a> on GitHub <i class="fa fa-github"></i></span>
         </div>
     </div>
-    <nav class="navbar navbar-light bg-faded">
+    <nav class="navbar navbar-dark bg-inverse" style="border-radius:0px">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" style="float:left; margin-top:8px">&#9776;</button>
             <div class="navbar-brand appname">C H A R G E</div>
         </div>
     </nav>
+    <!--<div  class="container">-->
     <form name="directions" style="padding-top: 10px;" novalidate>
     <div class="col-md-3">
         <div class="form-group">
@@ -112,6 +115,7 @@
             </div>
         </div>
     </div>
+        <!--</div>-->
 </section>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.1/js/tether.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
