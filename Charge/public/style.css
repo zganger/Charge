@@ -9,3 +9,16 @@
     border-color: #d9534f !important;
     cursor:default;
 }
+
+.appname {
+    font-family:Iceland;
+    font-size:32px;
+    cursor:default;
+    margin-left:30px;
+}
+
+.directions {
+    max-height:700px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
