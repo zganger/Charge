@@ -14,6 +14,7 @@ angular.module('gservice', [])
         var directionDisplay = new google.maps.DirectionsRenderer;
         var startAutocomplete = new google.maps.places.Autocomplete(document.getElementById('start'));
         var endAutocomplete = new google.maps.places.Autocomplete(document.getElementById('end'));
+        var createAutocomplete = new google.maps.places.Autocomplete(document.getElementById('street'));
 
         // Array of locations obtained from API calls
         var locations = [];
@@ -58,24 +59,14 @@ angular.module('gservice', [])
         };
 
         googleMapService.calculateAndDisplayRoute = function(start, end, range) {
-            if(startAutocomplete.getPlace().geometry) {
-                globalStart = { 'placeId' : startAutocomplete.getPlace().place_id };
-            }
-            else {
-                globalStart = start;
-            }
-            if(endAutocomplete.getPlace().geometry) {
-                globalEnd = { 'placeId' : endAutocomplete.getPlace().place_id };
-            }
-            else {
-                globalEnd = end;
-            }
+            globalStart = { 'placeId' : startAutocomplete.getPlace().place_id };
+            globalEnd = { 'placeId' : endAutocomplete.getPlace().place_id };
             globalRange = range;
             directionService.route({
                 origin: globalStart,
                 destination: globalEnd,
                 waypoints: waypts,
-                optimizeWaypoints: true,
+                optimizeWaypoints: false,
                 travelMode: google.maps.TravelMode.DRIVING
             }, function(response, status) {
                 if (status === google.maps.DirectionsStatus.OK) {
@@ -86,6 +77,10 @@ angular.module('gservice', [])
             });
             googleMapService.refresh(selectedLat, selectedLong);
         };
+
+        googleMapService.getPlace = function(){
+            return createAutocomplete.getPlace();
+        }
 
         // Private Inner Functions
         // --------------------------------------------------------------
@@ -178,8 +173,7 @@ var initialize = function(latitude, longitude) {
         var marker = new google.maps.Marker({
             position: n.latlon,
             map: map,
-            title: "Big Map",
-            icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+            icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
         });
 
         // For each marker created, add a listener that checks for clicks
@@ -187,9 +181,8 @@ var initialize = function(latitude, longitude) {
 
             // When clicked, open the selected marker's message
             //n.message.open(map, marker);
-            var loc = n.latlon.lat() + ", " + n.latlon.lng();
             waypts.push({
-                location: loc,
+                location: {lat: n.latlon.lat(), lng: n.latlon.lng()},
                 stopover: true
             });
             googleMapService.calculateAndDisplayRoute(globalStart, globalEnd, globalRange);
@@ -201,16 +194,14 @@ var initialize = function(latitude, longitude) {
         var APImarker = new google.maps.Marker({
             position: n.latlon,
             map: map,
-            title: "Big Map",
-            icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+            icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png"
         });
 
         // For each marker created, add a listener that checks for clicks
         google.maps.event.addListener(APImarker, 'click', function(){
             //n.message.open(map, APImarker);
-            var loc = n.latlon.lat() + ", " + n.latlon.lng();
             waypts.push({
-                location: loc,
+                location: {lat: n.latlon.lat(), lng: n.latlon.lng()},
                 stopover: true
             })
             googleMapService.calculateAndDisplayRoute(globalStart, globalEnd, globalRange);

@@ -9,7 +9,6 @@ var ChargeSchema = new Schema({
     state: {type: String, required: true},
     zip: {type: String, required: true},
     location: {type: [Number], required: true}, // [Long, Lat]
-    htmlverified: String,
     created_at: {type: Date, default: Date.now},
     updated_at: {type: Date, default: Date.now}
 });

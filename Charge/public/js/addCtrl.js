@@ -19,30 +19,32 @@ addCtrl.controller('addCtrl', function($scope, $http, $rootScope, geolocation, g
         // Display coordinates in location textboxes rounded to three decimal points
         $scope.formData.longitude = parseFloat(coords.long).toFixed(3);
         $scope.formData.latitude = parseFloat(coords.lat).toFixed(3);
-
-        // Display message confirming that the coordinates verified.
-        $scope.formData.htmlverified = "Yep (Thanks for giving us real data!)";
-
+        
         gservice.refresh($scope.formData.latitude, $scope.formData.longitude);
 
     });
 
-    // Functions
-    // ----------------------------------------------------------------------------
-    // Get coordinates based on mouse click. When a click event is detected....
     $rootScope.$on("clicked", function(){
 
         // Run the gservice functions associated with identifying coordinates
         $scope.$apply(function(){
             $scope.formData.latitude = parseFloat(gservice.clickLat).toFixed(3);
             $scope.formData.longitude = parseFloat(gservice.clickLong).toFixed(3);
-            $scope.formData.htmlverified = "Nope (Thanks for spamming my map...)";
         });
     });
-
-    // Creates a new charge port based on the form fields
+    
     $scope.createLoc = function() {
-
+        if($scope.formData.zip < 0 || $scope.formData > 99999)
+        {
+            document.getElementById('warning').innerText = "Please input a valid ZIP Code";
+            return;
+        } else if ($scope.formData.latitude < -85.05115 || $scope.formData.latitude > 85.05115) {
+            document.getElementById('warning').innerText = "Please enter a valid Latitude";
+            return;
+        } else if ($scope.formData.longitude < -180 || $scope.formData.longitude > 180) {
+            document.getElementById('warning').innerText = "Please enter a valid Longitude";
+            return;
+        }
         // Grabs all of the text box fields
         var chargeData = {
             street: $scope.formData.street,
@@ -71,6 +73,10 @@ addCtrl.controller('addCtrl', function($scope, $http, $rootScope, geolocation, g
     };
 
     $scope.getDirection = function() {
+        if($scope.formData.range < 1) {
+            $scope.formData.range = 1;
+        }
         gservice.calculateAndDisplayRoute($scope.formData.start, $scope.formData.end, $scope.formData.range);
+        document.getElementById('mapsize').className = "col-md-9";
     };
 });

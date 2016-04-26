@@ -31,7 +31,7 @@
         <div class="bg-inverse p-a-1">
             <div class="panel-heading">
                 <h2 class="panel-title text-center" style="text-align:center;">Post a new Charge Location</h2>
-                <span class="btn btn-sm btn-danger btn-block warning">All fields required</span>
+                <span id="warning" class="btn btn-sm btn-danger btn-block warning">All fields required</span>
                 </p>
             </div>
             <div class="panel-body">
@@ -49,7 +49,7 @@
                             <input type="text" class="form-control" id="state" placeholder="State" ng-model="formData.state" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="zip" placeholder="Zip Code" ng-model="formData.zip" required>
+                            <input type="number" class="form-control" id="zip" placeholder="Zip Code" ng-model="formData.zip" required>
                         </div>
                     </div>
                     <div class="col-md-1">
@@ -105,7 +105,7 @@
     </form>
     <div class="mapWithPanel">
         <!-- Google Map -->
-        <div class="col-md-9">
+        <div id="mapsize" class="col-md-12">
             <div id="map"></div>
         </div>
         <!-- Side Panel -->
