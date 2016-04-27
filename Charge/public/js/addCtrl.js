@@ -34,7 +34,7 @@ addCtrl.controller('addCtrl', function($scope, $http, $rootScope, geolocation, g
     });
     
     $scope.createLoc = function() {
-        if($scope.formData.zip < 0 || $scope.formData > 99999)
+        if($scope.formData.zip < 0 || $scope.formData.zip > 99999)
         {
             document.getElementById('warning').innerText = "Please input a valid ZIP Code";
             return;
