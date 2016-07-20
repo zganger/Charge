@@ -163,12 +163,14 @@ var initialize = function(latitude, longitude) {
             zoom: 3,
             center: myLatLng
         });
+        map.setOptions({ minZoom: 4, maxZoom: 15 });
     }
 
     directionDisplay.setMap(map);
     directionDisplay.setPanel(document.getElementById('directionsPanel'));
 
     // Loop through each location in the array and place a marker
+    /*  this is for the database values
     locations.forEach(function(n){
         var marker = new google.maps.Marker({
             position: n.latlon,
@@ -189,7 +191,7 @@ var initialize = function(latitude, longitude) {
             googleMapService.refresh(n.latlon.lat(), n.latlon.lng());
         });
     });
-
+    */
     APIlocations.forEach(function(n){
         var APImarker = new google.maps.Marker({
             position: n.latlon,

@@ -2,7 +2,7 @@
 // Dependencies
 // -----------------------------------------------------
 var express         = require('express');
-var mongoose        = require('mongoose');
+//var mongoose        = require('mongoose');
 var port            = process.env.PORT || 3000;
 var morgan          = require('morgan');
 var bodyParser      = require('body-parser');
@@ -12,7 +12,7 @@ var app             = express();
 // Express Configuration
 // -----------------------------------------------------
 // Sets the connection to MongoDB
-mongoose.connect("mongodb://localhost/ChargeMapApp");
+//mongoose.connect("mongodb://localhost/ChargeMapApp");
 
 // Logging and Parsing
 app.use(express.static(__dirname + '/public'));                 // sets the static files location to public
