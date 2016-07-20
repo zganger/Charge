@@ -1,5 +1,8 @@
 {
     "name": "ChargeMapsApp",
+    "version": "0.0.1",
+    "author": "Zack Ganger",
+    "contributors": "Zach Lister",
     "description": "An app that helps EV drivers route to charging stations",
     "repository": "https://github.com/zganger/Charge",
     "main": "server.js",
