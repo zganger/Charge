@@ -50,7 +50,7 @@ angular.module('gservice', [])
                 initialize(latitude, longitude);
             }).error(function(){});
 
-            var APIconnection = 'http://api.openchargemap.io/v2/poi/?output=json&countrycode=US&latitude=' + latitude + '&longitude=' + longitude + '&distance=' + globalRange + '&maxresults=1000';
+            var APIconnection = 'https://api.openchargemap.io/v2/poi/?output=json&countrycode=US&latitude=' + latitude + '&longitude=' + longitude + '&distance=' + globalRange + '&maxresults=1000';
             $http.get(APIconnection).success(function(response){
                 APIlocations = APItoMapPoints(response);
                 // Then initialize the map.
@@ -80,7 +80,7 @@ angular.module('gservice', [])
 
         googleMapService.getPlace = function(){
             return createAutocomplete.getPlace();
-        }
+        };
 
         // Private Inner Functions
         // --------------------------------------------------------------
@@ -112,11 +112,11 @@ angular.module('gservice', [])
                     city: chargePorts.city,
                     state: chargePorts.state,
                     zip: chargePorts.zip
-            });
-        }
-        // location is now an array populated with records in Google Maps format
-        return locations;
-    };
+                });
+            }
+            // location is now an array populated with records in Google Maps format
+            return locations;
+        };
 
         var APItoMapPoints = function(response){
 
@@ -134,7 +134,7 @@ angular.module('gservice', [])
                     ', ' + chargePorts.AddressInfo.StateOrProvince +
                     ' ' + chargePorts.AddressInfo.Postcode +
                     '</p>';
-                
+
                 APIlocations.push({
                     latlon: new google.maps.LatLng(chargePorts.AddressInfo.Latitude, chargePorts.AddressInfo.Longitude),
                     message: new google.maps.InfoWindow({
@@ -151,87 +151,122 @@ angular.module('gservice', [])
         };
 
 // Initializes the map
-var initialize = function(latitude, longitude) {
+        var initialize = function(latitude, longitude) {
 
-    // Uses the selected lat, long as starting point
-    var myLatLng = {lat: parseFloat(selectedLat), lng: parseFloat(selectedLong)};
+            /*
+            var https = require("https");
+            var users = ['zganger'];
+            var options = {
+                host: 'https://api.github.com/users/',
+                port: 443,
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            for(var i= 0; i < users.length; i++) {
+                options.path = users[i];
+                var req = https.request(options, function(response){
+                    var output = '';
+                    response.on('data', function (data) {
+                        output += data;
+                    });
+                    res.on('end', function() {
+                        var obj = JSON.parse(output);
+                        onResult(res.statusCode, obj);
+                    });
+                });
+                $http.get(APIconnection).success(function(response){
+                    var imgSRC = response['avatar_url'];
+                    var userslist = document.getElementById('usersList');
+                    var li = document.createElement("li");
+                    var img = document.createElement('img');
+                    img.setAttribute('src', imgSRC);
+                    img.setAttribute('style', 'height:10rem;width:10rem');
+                    li.appendChild(img);
+                    userslist.appendChild(li);
+                    //$('<a href="https://github.com/' + users[i] + '"><img src="' + imgSRC + '" style="height:10rem;width:10rem"></img></a>', {html: text}).appendTo('ul.usersList')
+                })
+            }
+            */
 
-    // If map has not been created already...
-    if (!map){
-        // Create a new map and place in the index.html page
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 3,
-            center: myLatLng
-        });
-        map.setOptions({ minZoom: 4, maxZoom: 15 });
-    }
+            // Uses the selected lat, long as starting point
+            var myLatLng = {lat: parseFloat(selectedLat), lng: parseFloat(selectedLong)};
 
-    directionDisplay.setMap(map);
-    directionDisplay.setPanel(document.getElementById('directionsPanel'));
+            // If map has not been created already...
+            if (!map){
+                // Create a new map and place in the index.html page
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 3,
+                    center: myLatLng
+                });
+                map.setOptions({ minZoom: 4, maxZoom: 15 });
+            }
 
-    // Loop through each location in the array and place a marker
-    /*  this is for the database values
-    locations.forEach(function(n){
-        var marker = new google.maps.Marker({
-            position: n.latlon,
-            map: map,
-            icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-        });
+            directionDisplay.setMap(map);
+            directionDisplay.setPanel(document.getElementById('directionsPanel'));
 
-        // For each marker created, add a listener that checks for clicks
-        google.maps.event.addListener(marker, 'click', function(){
+            // Loop through each location in the array and place a marker
+            /*  this is for the database values
+             locations.forEach(function(n){
+             var marker = new google.maps.Marker({
+             position: n.latlon,
+             map: map,
+             icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+             });
 
-            // When clicked, open the selected marker's message
-            //n.message.open(map, marker);
-            waypts.push({
-                location: {lat: n.latlon.lat(), lng: n.latlon.lng()},
-                stopover: true
+             // For each marker created, add a listener that checks for clicks
+             google.maps.event.addListener(marker, 'click', function(){
+
+             // When clicked, open the selected marker's message
+             //n.message.open(map, marker);
+             waypts.push({
+             location: {lat: n.latlon.lat(), lng: n.latlon.lng()},
+             stopover: true
+             });
+             googleMapService.calculateAndDisplayRoute(globalStart, globalEnd, globalRange);
+             googleMapService.refresh(n.latlon.lat(), n.latlon.lng());
+             });
+             });
+             */
+            APIlocations.forEach(function(n){
+                var APImarker = new google.maps.Marker({
+                    position: n.latlon,
+                    map: map,
+                    icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                });
+
+                // For each marker created, add a listener that checks for clicks
+                google.maps.event.addListener(APImarker, 'click', function(){
+                    //n.message.open(map, APImarker);
+                    waypts.push({
+                        location: {lat: n.latlon.lat(), lng: n.latlon.lng()},
+                        stopover: true
+                    });
+                    googleMapService.calculateAndDisplayRoute(globalStart, globalEnd, globalRange);
+                    googleMapService.refresh(n.latlon.lat(), n.latlon.lng());
+                });
             });
-            googleMapService.calculateAndDisplayRoute(globalStart, globalEnd, globalRange);
-            googleMapService.refresh(n.latlon.lat(), n.latlon.lng());
-        });
-    });
-    */
-    APIlocations.forEach(function(n){
-        var APImarker = new google.maps.Marker({
-            position: n.latlon,
-            map: map,
-            icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png"
-        });
 
-        // For each marker created, add a listener that checks for clicks
-        google.maps.event.addListener(APImarker, 'click', function(){
-            //n.message.open(map, APImarker);
-            waypts.push({
-                location: {lat: n.latlon.lat(), lng: n.latlon.lng()},
-                stopover: true
-            })
-            googleMapService.calculateAndDisplayRoute(globalStart, globalEnd, globalRange);
-            googleMapService.refresh(n.latlon.lat(), n.latlon.lng());
-        });
-    });
+            // Set initial location
+            var initialLocation = new google.maps.LatLng(latitude, longitude);
 
-    // Set initial location
-    var initialLocation = new google.maps.LatLng(latitude, longitude);
+            // Function for moving to a selected location
+            map.panTo(initialLocation);
 
-    // Function for moving to a selected location
-    map.panTo(initialLocation);
+            // Clicking on the Map
+            google.maps.event.addListener(map, 'click', function(e){
+                map.panTo(e.latLng);
 
-    // Clicking on the Map moves the bouncing red marker
-    google.maps.event.addListener(map, 'click', function(e){
-        map.panTo(e.latLng);
-
-        // Update Broadcasted Variable (lets the panels know to change their lat, long values)
-        googleMapService.clickLat = (e.latLng).lat();
-        googleMapService.clickLong = (e.latLng).lng();
-        $rootScope.$broadcast("clicked");
-    });
-};
+                // Update Broadcasted Variable (lets the panels know to change their lat, long values)
+                googleMapService.clickLat = (e.latLng).lat();
+                googleMapService.clickLong = (e.latLng).lng();
+                $rootScope.$broadcast("clicked");
+            });
+        };
 
 // Refresh the page upon window load. Use the initial latitude and longitude
-google.maps.event.addDomListener(window, 'load',
-    googleMapService.refresh(selectedLat, selectedLong));
-
-return googleMapService;
-});
-
+        google.maps.event.addDomListener(window, 'load',
+            googleMapService.refresh(selectedLat, selectedLong));
+        return googleMapService;
+    });
