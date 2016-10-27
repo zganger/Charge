@@ -1,5 +1,5 @@
 #map {
-    height: 42rem;
+    height: calc(100vh - 10rem);
     width: 100%;
 }
 
@@ -17,7 +17,7 @@
 }
 
 .directions {
-    max-height:700px;
+    max-height: calc(100vh - 10rem);
     overflow-y: scroll;
     overflow-x: hidden;
 }
