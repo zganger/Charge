@@ -42,17 +42,19 @@ angular.module('gservice', [])
             selectedLat = latitude;
             selectedLong = longitude;
 
-            // Perform an AJAX call to get all of the records in the db.
-            $http.get('/chargePorts').success(function(response){
-                // Convert the results into Google Map Format
-                locations = convertToMapPoints(response);
-                // Then initialize the map.
-                initialize(latitude, longitude);
-            }).error(function(){});
+            // // Perform an AJAX call to get all of the records in the db.
+            // $http.get('/chargePorts').success(function(response){
+            //     // Convert the results into Google Map Format
+            //     locations = convertToMapPoints(response);
+            //     // Then initialize the map.
+            //     initialize(latitude, longitude);
+            // }).error(function(){});
 
             var APIconnection = 'https://api.openchargemap.io/v2/poi/?output=json&countrycode=US&latitude=' + latitude + '&longitude=' + longitude + '&distance=' + globalRange + '&maxresults=1000';
             $http.get(APIconnection).success(function(response){
                 APIlocations = APItoMapPoints(response);
+                // Filter map points
+                //APIlocations = filter_stations(APIlocations);
                 // Then initialize the map.
                 initialize(latitude, longitude);
             }).error(function(){});
@@ -124,7 +126,7 @@ angular.module('gservice', [])
             var APIlocations = [];
 
             // Loop through all of the JSON entries provided in the response
-            for(var i= 0; i < response.length; i++) {
+            for(var i = 0; i < response.length; i++) {
                 var chargePorts = response[i];
 
                 // Create popup windows for each record
@@ -148,6 +150,16 @@ angular.module('gservice', [])
                 });
             }
             return APIlocations;
+        };
+
+        var filter_stations = function(locations) {
+            var filtered = [];
+            for(var i = 0; i < locations.length(); i++) {
+                var latitude = locations[i].latlon.lat();
+                var longitude = locations[i].latlon.lng();
+                filtered.push(locations[i])
+            }
+            return filtered;
         };
 
 // Initializes the map
