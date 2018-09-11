@@ -7,12 +7,12 @@
     "repository": "https://github.com/zganger/Charge",
     "main": "server.js",
     "dependencies": {
-        "express": "~4.7.2",
-        "mongoose": "~4.1.0",
-        "morgan": "~1.2.2",
-        "body-parser": "~1.5.2",
+        "body-parser": "^1.18.3",
+        "express": "^4.16.3",
         "jsonwebtoken": "^5.0.2",
-        "method-override": "~2.1.2"
+        "method-override": "^3.0.0",
+        "mongoose": "^5.2.14",
+        "morgan": "~1.2.2"
     },
     "engines": {
         "node": "8.1.4"
