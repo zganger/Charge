@@ -7,7 +7,7 @@
     "repository": "https://github.com/zganger/Charge",
     "main": "server.js",
     "dependencies": {
-        "body-parser": "^2.3.0",
+        "body-parser": "^2.4.0",
         "express": "^5.2.1",
         "jsonwebtoken": "^9.0.0",
         "method-override": "^3.0.0",
